@@ -7,6 +7,8 @@ dotenv.config();
 const app = express();
 
 
+
+
 morgan.token("body", (req,res) => {
     return JSON.stringify(req.body);
 })
@@ -14,7 +16,7 @@ app.use(morgan(":method,:url,:response-time,:body,"));
 app.use(bodyParser.json());
 app.use(cors())
 
-const notes = [
+let notes = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -55,13 +57,13 @@ app.get("/api/persons/:id", (req, res) => {
     }
 })
 
-app.put("/api/persons/:id", (req, res) => {
-    let id = req.params.id;
-    notes = notes.map((notes) => {
+  app.delete("/api/persons/:id", (req, res) => {
+      let id = req.params.id;
+      notes = notes.filter((notes) => {
         return notes.id !== id;
-    })
-    req.json("person deleted")
-});
+      });
+      return res.status(204).end();
+  });
 
 app.post("/api/persons", (req, res) => {
     const { name, number } = req.body;
@@ -76,7 +78,7 @@ app.post("/api/persons", (req, res) => {
         error: "This name is already Taken",
       });
     }
-    let id =Math.ceil(Math.random() * 1000*31);
+    let id =String(Math.ceil(Math.random() * 1000*31));
     const newobject = {
         id, name, number
     };
@@ -91,6 +93,11 @@ app.get("/info", (req, res) => {
     res.send(` THe phonebook has info about ${notes.length} people` + new Date());
 })
 const PORT = process.env.PORT;
+
+app.use(express.static("dist"));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve("dist", "index.html"));
+});
 app.listen(PORT, () => {
-    console.log("server running on port 3001")
+  console.log(`Server running on port ${PORT}`);
 })
