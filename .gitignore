@@ -2,13 +2,13 @@
 node_modules/
 **/node_modules/
 
-# === Build & Output directories ===
-dist/
-build/
-.cache/
-.next/
-out/
-
+# # === Build & Output directories ===
+# dist/
+# build/
+# .cache/
+# .next/
+# out/
+ 
 # === Environment variables ===
 .env
 .env.local
