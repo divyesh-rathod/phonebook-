@@ -5,7 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 const app = express();
-
+const PORT = process.env.PORT;
 
 
 
@@ -92,10 +92,10 @@ app.get("/info", (req, res) => {
     let currentDate = new Date().toISOString();
     res.send(` THe phonebook has info about ${notes.length} people` + new Date());
 })
-const PORT = process.env.PORT;
+
 
 app.use(express.static("dist"));
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.resolve("dist", "index.html"));
 });
 app.listen(PORT, () => {
